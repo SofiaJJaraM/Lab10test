@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: recipe_user
+      POSTGRES_DB: recipe_book_production
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  web:
+    build: .
+    command: bundle exec puma -C config/puma.rb
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      RECIPE_BOOK_DATABASE_PASSWORD: password
+      SECRET_KEY_BASE: AAAAC3NzaC1lZDI1NTE5AAAAIAuKNGskCPicxIlksszF0X77KkLv2jY2zI5VatUgLef4 
+volumes:
+  pgdata: {}

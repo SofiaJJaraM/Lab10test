@@ -1,0 +1,25 @@
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <div>
+      <h2 class="card-title mb-0"><%= @recipe.title %></h2>
+      <p class="card-subtitle mt-1 text-muted">
+        <strong>Tiempo:</strong> <%= @recipe.cook_time %> minutos | <strong>Dificultad:</strong> <%= @recipe.difficulty %>
+      </p>
+    </div>
+    <div>
+      <% if can? :destroy, @recipe %>
+        <%= link_to "Eliminar", @recipe, data: { turbo_method: :delete, turbo_confirm: "¿Estás seguro?" }, class: "btn btn-danger" %>
+      <% end %>
+    </div>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Instrucciones</h5>
+    <%= @recipe.instructions %>
+  </div>
+  <div class="card-footer">
+    <% if can? :update, @recipe %>
+      <%= link_to "Editar esta receta", edit_recipe_path(@recipe), class: "btn btn-secondary" %>
+    <% end %>
+    <%= link_to "Volver a las recetas", recipes_path, class: "btn btn-outline-dark" %>
+  </div>
+</div>
