@@ -24,7 +24,8 @@ class RecipesController < ApplicationController
 
     respond_to do |format|
       if @recipe.save
-        format.html { redirect_to @recipe, notice: "Recipe was successfully created." }
+        LongTaskJob.perform_later(@recipe.id, current_user&.id)
+        format.html { redirect_to @recipe, notice: "Recipe was successfully created. Background job enqueued." }
         format.json { render :show, status: :created, location: @recipe }
       else
         format.html { render :new, status: :unprocessable_entity }
