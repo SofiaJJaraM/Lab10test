@@ -21,8 +21,14 @@ default: &default
 
 
 development:
-  <<: *default
-  database: recipebook_webapp_development
+  primary:
+    <<: *default
+    database: recipebook_webapp_development
+
+  queue:
+    <<: *default
+    database: recipebook_webapp_development_queue
+    migrations_paths: db/queue_migrate
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -78,6 +84,7 @@ test:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
+
 production:
   <<: *default
   database: recipebook_webapp_production
