@@ -20,17 +20,10 @@ class RecipesController < ApplicationController
 
   # POST /recipes or /recipes.json
   def create
-    @recipe.user = current_user
-
+    CreateRecipeJob.perform_later(recipe_params.to_h, current_user&.id)
     respond_to do |format|
-      if @recipe.save
-        LongTaskJob.perform_later(@recipe.id, current_user&.id)
-        format.html { redirect_to @recipe, notice: "Recipe was successfully created. Background job enqueued." }
-        format.json { render :show, status: :created, location: @recipe }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @recipe.errors, status: :unprocessable_entity }
-      end
+      format.html { redirect_to recipes_path, notice: "Creación encolada. La receta se guardará cuando termine el proceso en segundo plano." }
+      format.json { head :accepted }
     end
   end
 
